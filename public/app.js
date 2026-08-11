@@ -94,9 +94,20 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
 
         const data = await response.json();
 
-        alert(data.message);
+        if (response.ok) {
 
-        document.getElementById("userForm").reset();
+            alert(data.message);
+
+            document.getElementById("userForm").reset();
+
+            // Redirect to Users Page
+            window.location.href = "users.html";
+
+        } else {
+
+            alert(data.message || "Failed to save user");
+
+        }
 
     } catch (error) {
 
