@@ -1,36 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration Form</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Registration Form</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-
     <div class="form-box">
 
         <h1>User Registration Form</h1>
 
         <form id="userForm">
 
-            <input type="text" id="firstName" placeholder="First Name" required>
+            <!-- First Name -->
+            <input
+                type="text"
+                id="firstName"
+                placeholder="First Name"
+                pattern="[A-Za-z ]+"
+                title="Only letters allowed"
+                required
+            >
 
-            <input type="text" id="lastName" placeholder="Last Name" required>
+            <!-- Last Name -->
+            <input
+                type="text"
+                id="lastName"
+                placeholder="Last Name"
+                pattern="[A-Za-z ]+"
+                title="Only letters allowed"
+                required
+            >
 
-            <!-- Mobile Validation -->
+            <!-- Mobile -->
             <input
                 type="tel"
                 id="mobile"
                 placeholder="Mobile Number"
-                pattern="[0-9]{10}"
                 maxlength="10"
+                pattern="[0-9]{10}"
+                oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                title="Enter exactly 10 digits"
                 required
             >
 
-            <!-- Email Validation -->
+            <!-- Email -->
             <input
                 type="email"
                 id="email"
@@ -38,29 +55,59 @@
                 required
             >
 
-            <input type="text" id="street" placeholder="Street">
+            <!-- Street -->
+            <input
+                type="text"
+                id="street"
+                placeholder="Street"
+            >
 
-            <input type="text" id="city" placeholder="City">
+            <!-- City -->
+            <input
+                type="text"
+                id="city"
+                placeholder="City"
+                pattern="[A-Za-z ]+"
+                title="Only letters allowed"
+            >
 
-            <input type="text" id="state" placeholder="State">
+            <!-- State -->
+            <input
+                type="text"
+                id="state"
+                placeholder="State"
+                pattern="[A-Za-z ]+"
+                title="Only letters allowed"
+            >
 
-            <input type="text" id="country" placeholder="Country">
+            <!-- Country -->
+            <input
+                type="text"
+                id="country"
+                placeholder="Country"
+                pattern="[A-Za-z ]+"
+                title="Only letters allowed"
+            >
 
-            <!-- Login ID Validation -->
+            <!-- Login ID -->
             <input
                 type="text"
                 id="loginId"
                 placeholder="Login ID (8 Characters)"
+                minlength="8"
+                maxlength="8"
                 pattern="[A-Za-z0-9]{8}"
+                title="Exactly 8 alphanumeric characters"
                 required
             >
 
-            <!-- Password Validation -->
+            <!-- Password -->
             <input
                 type="password"
                 id="password"
                 placeholder="Password"
                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{6,}$"
+                title="Password must contain 1 uppercase, 1 lowercase, 1 special character and minimum 6 characters"
                 required
             >
 
@@ -69,7 +116,6 @@
         </form>
 
     </div>
-
 </div>
 
 <script src="app.js"></script>

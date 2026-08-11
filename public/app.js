@@ -2,10 +2,28 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-    const mobile = document.getElementById("mobile").value;
-    const email = document.getElementById("email").value;
-    const loginId = document.getElementById("loginId").value;
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const street = document.getElementById("street").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const state = document.getElementById("state").value.trim();
+    const country = document.getElementById("country").value.trim();
+    const loginId = document.getElementById("loginId").value.trim();
     const password = document.getElementById("password").value;
+
+    // First Name Validation
+    if (!/^[A-Za-z ]+$/.test(firstName)) {
+        alert("First Name should contain only letters");
+        return;
+    }
+
+    // Last Name Validation
+    if (!/^[A-Za-z ]+$/.test(lastName)) {
+        alert("Last Name should contain only letters");
+        return;
+    }
 
     // Mobile Validation
     if (!/^\d{10}$/.test(mobile)) {
@@ -16,6 +34,24 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
     // Email Validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         alert("Enter a valid Email Address");
+        return;
+    }
+
+    // City Validation
+    if (city && !/^[A-Za-z ]+$/.test(city)) {
+        alert("City should contain only letters");
+        return;
+    }
+
+    // State Validation
+    if (state && !/^[A-Za-z ]+$/.test(state)) {
+        alert("State should contain only letters");
+        return;
+    }
+
+    // Country Validation
+    if (country && !/^[A-Za-z ]+$/.test(country)) {
+        alert("Country should contain only letters");
         return;
     }
 
@@ -32,20 +68,18 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
     }
 
     const userData = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        mobile: mobile,
-        email: email,
-
+        firstName,
+        lastName,
+        mobile,
+        email,
         address: {
-            street: document.getElementById("street").value,
-            city: document.getElementById("city").value,
-            state: document.getElementById("state").value,
-            country: document.getElementById("country").value
+            street,
+            city,
+            state,
+            country
         },
-
-        loginId: loginId,
-        password: password
+        loginId,
+        password
     };
 
     try {
@@ -66,6 +100,7 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
 
     } catch (error) {
 
+        console.error(error);
         alert("Error saving user");
 
     }
