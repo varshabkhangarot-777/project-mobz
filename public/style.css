@@ -68,3 +68,25 @@ button:hover{
     background:#00b894;
     transform:translateY(-2px);
 }
+
+/* View Saved Users Button */
+
+.view-users-btn{
+    display:block;
+    width:100%;
+    margin-top:20px;
+    padding:16px;
+    border-radius:12px;
+    background:#00d4aa;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    text-align:center;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.view-users-btn:hover{
+    background:#00b894;
+    transform:translateY(-2px);
+}
