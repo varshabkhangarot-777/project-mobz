@@ -1,3 +1,5 @@
+const socket = io();
+
 document.getElementById("userForm").addEventListener("submit", async (e) => {
 
     e.preventDefault();
@@ -13,55 +15,46 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
     const loginId = document.getElementById("loginId").value.trim();
     const password = document.getElementById("password").value;
 
-    // First Name Validation
     if (!/^[A-Za-z ]+$/.test(firstName)) {
         alert("First Name should contain only letters");
         return;
     }
 
-    // Last Name Validation
     if (!/^[A-Za-z ]+$/.test(lastName)) {
         alert("Last Name should contain only letters");
         return;
     }
 
-    // Mobile Validation
     if (!/^\d{10}$/.test(mobile)) {
         alert("Mobile Number must be exactly 10 digits");
         return;
     }
 
-    // Email Validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         alert("Enter a valid Email Address");
         return;
     }
 
-    // City Validation
     if (city && !/^[A-Za-z ]+$/.test(city)) {
         alert("City should contain only letters");
         return;
     }
 
-    // State Validation
     if (state && !/^[A-Za-z ]+$/.test(state)) {
         alert("State should contain only letters");
         return;
     }
 
-    // Country Validation
     if (country && !/^[A-Za-z ]+$/.test(country)) {
         alert("Country should contain only letters");
         return;
     }
 
-    // Login ID Validation
     if (!/^[A-Za-z0-9]{8}$/.test(loginId)) {
         alert("Login ID must be exactly 8 alphanumeric characters");
         return;
     }
 
-    // Password Validation
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{6,}$/.test(password)) {
         alert("Password must contain at least 1 uppercase, 1 lowercase, 1 special character and minimum 6 characters");
         return;
@@ -96,12 +89,19 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
 
         if (response.ok) {
 
+            socket.emit("joinUser", {
+                firstName,
+                lastName,
+                email
+            });
+
             alert(data.message);
 
             document.getElementById("userForm").reset();
 
-            // Redirect to Users Page
-            window.location.href = "users.html";
+            setTimeout(() => {
+                window.location.href = "live-users.html";
+            }, 500);
 
         } else {
 
