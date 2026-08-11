@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration Form</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -21,9 +20,23 @@
 
             <input type="text" id="lastName" placeholder="Last Name" required>
 
-            <input type="text" id="mobile" placeholder="Mobile Number" required>
+            <!-- Mobile Validation -->
+            <input
+                type="tel"
+                id="mobile"
+                placeholder="Mobile Number"
+                pattern="[0-9]{10}"
+                maxlength="10"
+                required
+            >
 
-            <input type="email" id="email" placeholder="Email Address" required>
+            <!-- Email Validation -->
+            <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                required
+            >
 
             <input type="text" id="street" placeholder="Street">
 
@@ -33,9 +46,23 @@
 
             <input type="text" id="country" placeholder="Country">
 
-            <input type="text" id="loginId" placeholder="Login ID" required>
+            <!-- Login ID Validation -->
+            <input
+                type="text"
+                id="loginId"
+                placeholder="Login ID (8 Characters)"
+                pattern="[A-Za-z0-9]{8}"
+                required
+            >
 
-            <input type="password" id="password" placeholder="Password" required>
+            <!-- Password Validation -->
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{6,}$"
+                required
+            >
 
             <button type="submit">Save User</button>
 
