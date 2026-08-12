@@ -17,51 +17,48 @@ const io = new Server(server, {
     }
 });
 
-// MongoDB Connect
 connectDB();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-// Live Users Array
 let liveUsers = [];
 
-// Socket Connection
 io.on("connection", (socket) => {
 
     console.log("User Connected:", socket.id);
 
-    // Send current users to newly connected client
     socket.emit("userList", liveUsers);
 
     socket.on("joinUser", (user) => {
 
-        // Join Room
         socket.join("live_users");
 
-        const existingUser = liveUsers.find(
-            u => u.email === user.email
+        // Remove previous entry for same browser/session
+        liveUsers = liveUsers.filter(
+            (item) => item.clientId !== user.clientId
         );
 
-        if (!existingUser) {
-
-            liveUsers.push({
-                socketId: socket.id,
-                email: user.email,
-                name: user.firstName + " " + user.lastName
-            });
-
-        }
+        liveUsers.push({
+            clientId: user.clientId,
+            socketId: socket.id,
+            email: user.email,
+            name: `${user.firstName} ${user.lastName}`
+        });
 
         io.to("live_users").emit("userList", liveUsers);
+
+        console.log("User Joined:", user.email);
+        console.log("Client ID:", user.clientId);
+        console.log("Socket ID:", socket.id);
+        console.log("Live Users:", liveUsers);
     });
 
     socket.on("disconnect", () => {
 
         liveUsers = liveUsers.filter(
-            user => user.socketId !== socket.id
+            (item) => item.socketId !== socket.id
         );
 
         io.to("live_users").emit("userList", liveUsers);
@@ -70,12 +67,10 @@ io.on("connection", (socket) => {
     });
 });
 
-// Home Route
 app.get("/", (req, res) => {
     res.send("Server Running Successfully");
 });
 
-// Save User
 app.post("/users", async (req, res) => {
 
     try {
@@ -91,6 +86,8 @@ app.post("/users", async (req, res) => {
 
     } catch (error) {
 
+        console.error("Save User Error:", error);
+
         res.status(500).json({
             success: false,
             message: error.message
@@ -98,7 +95,6 @@ app.post("/users", async (req, res) => {
     }
 });
 
-// Get All Users
 app.get("/users", async (req, res) => {
 
     try {
@@ -109,6 +105,8 @@ app.get("/users", async (req, res) => {
 
     } catch (error) {
 
+        console.error("Get Users Error:", error);
+
         res.status(500).json({
             success: false,
             message: error.message
@@ -116,19 +114,27 @@ app.get("/users", async (req, res) => {
     }
 });
 
-// Get User By Email
 app.get("/users/:email", async (req, res) => {
 
     try {
 
-        const user = await User.findOne({
-            email: req.params.email
-        });
+        const email = decodeURIComponent(req.params.email);
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
 
         res.status(200).json(user);
 
     } catch (error) {
 
+        console.error("Get User By Email Error:", error);
+
         res.status(500).json({
             success: false,
             message: error.message
@@ -136,7 +142,8 @@ app.get("/users/:email", async (req, res) => {
     }
 });
 
-// Start Server
-server.listen(3000, () => {
-    console.log("Server Running on Port 3000");
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server Running on Port ${PORT}`);
 });

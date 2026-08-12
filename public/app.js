@@ -1,5 +1,3 @@
-const socket = io();
-
 document.getElementById("userForm").addEventListener("submit", async (e) => {
 
     e.preventDefault();
@@ -56,7 +54,9 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
     }
 
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{6,}$/.test(password)) {
-        alert("Password must contain at least 1 uppercase, 1 lowercase, 1 special character and minimum 6 characters");
+        alert(
+            "Password must contain at least 1 uppercase, 1 lowercase, 1 special character and minimum 6 characters"
+        );
         return;
     }
 
@@ -87,33 +87,38 @@ document.getElementById("userForm").addEventListener("submit", async (e) => {
 
         const data = await response.json();
 
-        if (response.ok) {
-
-            socket.emit("joinUser", {
-                firstName,
-                lastName,
-                email
-            });
-
-            alert(data.message);
-
-            document.getElementById("userForm").reset();
-
-            setTimeout(() => {
-                window.location.href = "live-users.html";
-            }, 500);
-
-        } else {
-
+        if (!response.ok) {
             alert(data.message || "Failed to save user");
-
+            return;
         }
+
+        let clientId = sessionStorage.getItem("clientId");
+
+        if (!clientId) {
+            clientId = crypto.randomUUID();
+            sessionStorage.setItem("clientId", clientId);
+        }
+
+        sessionStorage.setItem(
+            "liveUser",
+            JSON.stringify({
+                clientId: clientId,
+                firstName: firstName,
+                lastName: lastName,
+                email: email
+            })
+        );
+
+        alert(data.message);
+
+        document.getElementById("userForm").reset();
+
+        window.location.href = "live-users.html";
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Save User Error:", error);
         alert("Error saving user");
-
     }
 
 });
